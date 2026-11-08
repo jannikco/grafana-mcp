@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "product": "pipmcp",
+  "credential": "PIPMCP_API_KEY",
+  "skills": [
+    {
+      "name": "pipmcp-grafana",
+      "description": "Connect AI agents to Grafana using one PipMCP API key and actual hosted tool discovery."
+    }
+  ],
+  "files": {
+    "skills/pipmcp-grafana/SKILL.md": "90f58b6ab5dc3e8bc49978a309d7acb64f0d4f5714a363a43550ac237c8a5dce"
+  }
+}
