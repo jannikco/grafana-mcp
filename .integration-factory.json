@@ -1,0 +1,365 @@
+{
+  "schemaVersion": 1,
+  "id": "grafana-mcp",
+  "kind": "provider-connector",
+  "artifactType": "connector",
+  "qualityVersion": 2,
+  "title": "Grafana MCP server",
+  "description": "Inspect a dashboard and record an approved release annotation. Read provider data first, then explicitly approve the selected change with operator write opt-in and a unique per-call approval key.",
+  "status": "ready",
+  "verification": "mock-only",
+  "releaseEligible": true,
+  "maintainer": "jannikco",
+  "license": "MIT",
+  "product": "pipmcp",
+  "appSlug": "grafana",
+  "appName": "Grafana",
+  "operationIds": [
+    "search_dashboards",
+    "get_dashboard",
+    "create_annotation"
+  ],
+  "sourceRevision": "bc8bd70c6c4ccf37c5128475972e61edc5bf6a0004d234769d523c2fa67e3156",
+  "evidence": [
+    "Actual tools/call and direct-provider request contract tests"
+  ],
+  "provenance": [
+    "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/folder_dashboard_search/",
+    "https://grafana.com/docs/grafana/v12.0/developers/http_api/dashboard/",
+    "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/annotations/"
+  ],
+  "attributionSlug": "github-grafana-mcp",
+  "connectorId": "grafana",
+  "connector": {
+    "id": "grafana",
+    "appSlug": "grafana",
+    "name": "Grafana",
+    "version": "0.2.0",
+    "baseUrl": "https://{GRAFANA_HOST}/api",
+    "auth": {
+      "type": "bearer",
+      "env": "GRAFANA_TOKEN"
+    },
+    "tools": [
+      {
+        "name": "search_dashboards",
+        "description": "Search dashboards.",
+        "method": "GET",
+        "path": "/search",
+        "readOnly": true,
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048,
+              "description": "Value"
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5000
+            },
+            "page": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100000
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "bindings": {
+          "path": [],
+          "query": {
+            "query": "query",
+            "limit": "limit",
+            "page": "page"
+          },
+          "body": {}
+        },
+        "sampleArguments": {
+          "query": "production",
+          "limit": 10
+        },
+        "provenance": [
+          "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/folder_dashboard_search/",
+          "https://grafana.com/docs/grafana/v12.0/developers/http_api/dashboard/",
+          "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/annotations/"
+        ],
+        "approvalRequired": false,
+        "evidence": {
+          "providerLiveValidation": "not-run",
+          "localValidation": "provider-request-fixture"
+        }
+      },
+      {
+        "name": "get_dashboard",
+        "description": "Get dashboard.",
+        "method": "GET",
+        "path": "/dashboards/uid/{uid}",
+        "readOnly": true,
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "uid": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048,
+              "description": "Value"
+            }
+          },
+          "required": [
+            "uid"
+          ],
+          "additionalProperties": false
+        },
+        "bindings": {
+          "path": [
+            "uid"
+          ],
+          "query": {},
+          "body": {}
+        },
+        "sampleArguments": {
+          "uid": "dashboard-uid"
+        },
+        "provenance": [
+          "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/folder_dashboard_search/",
+          "https://grafana.com/docs/grafana/v12.0/developers/http_api/dashboard/",
+          "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/annotations/"
+        ],
+        "approvalRequired": false,
+        "evidence": {
+          "providerLiveValidation": "not-run",
+          "localValidation": "provider-request-fixture"
+        }
+      },
+      {
+        "name": "create_annotation",
+        "description": "Create annotation.",
+        "method": "POST",
+        "path": "/annotations",
+        "readOnly": false,
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048,
+              "description": "Value"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048,
+                "description": "Value"
+              },
+              "maxItems": 1000
+            },
+            "time": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "additionalProperties": false
+        },
+        "bindings": {
+          "path": [],
+          "query": {},
+          "body": {
+            "text": "text",
+            "tags": "tags",
+            "time": "time"
+          }
+        },
+        "sampleArguments": {
+          "text": "Approved release deployed",
+          "tags": [
+            "release"
+          ]
+        },
+        "provenance": [
+          "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/folder_dashboard_search/",
+          "https://grafana.com/docs/grafana/v12.0/developers/http_api/dashboard/",
+          "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/annotations/"
+        ],
+        "approvalRequired": true,
+        "evidence": {
+          "providerLiveValidation": "not-run",
+          "localValidation": "provider-request-fixture"
+        }
+      }
+    ],
+    "workflow": {
+      "name": "Inspect a dashboard and record an approved release annotation",
+      "description": "Inspect a dashboard and record an approved release annotation. Read provider data first, then explicitly approve the selected change with operator write opt-in and a unique per-call approval key.",
+      "steps": [
+        "search_dashboards",
+        "get_dashboard",
+        "create_annotation"
+      ]
+    },
+    "provenance": [
+      "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/folder_dashboard_search/",
+      "https://grafana.com/docs/grafana/v12.0/developers/http_api/dashboard/",
+      "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/annotations/"
+    ],
+    "verification": "mock-only",
+    "providerLiveValidation": "not-run",
+    "capabilityEvidence": {
+      "local": {
+        "level": "Tested",
+        "operations": [
+          {
+            "name": "search_dashboards",
+            "level": "Tested",
+            "evidenceRefs": [
+              "Provider request/stdio contract tests"
+            ],
+            "method": "contract-fixture"
+          },
+          {
+            "name": "get_dashboard",
+            "level": "Tested",
+            "evidenceRefs": [
+              "Provider request/stdio contract tests"
+            ],
+            "method": "contract-fixture"
+          },
+          {
+            "name": "create_annotation",
+            "level": "Tested",
+            "evidenceRefs": [
+              "Provider request/stdio contract tests"
+            ],
+            "method": "contract-fixture"
+          }
+        ],
+        "evidenceRefs": [
+          "Provider request/stdio contract tests"
+        ],
+        "mode": "local"
+      },
+      "managed": {
+        "level": "Documented",
+        "operations": [
+          {
+            "name": "search_dashboards",
+            "level": "Documented",
+            "evidenceRefs": [],
+            "method": "documentation"
+          },
+          {
+            "name": "get_dashboard",
+            "level": "Documented",
+            "evidenceRefs": [],
+            "method": "documentation"
+          },
+          {
+            "name": "create_annotation",
+            "level": "Documented",
+            "evidenceRefs": [],
+            "method": "documentation"
+          }
+        ],
+        "evidenceRefs": [],
+        "mode": "managed"
+      }
+    },
+    "hostVariables": [
+      "GRAFANA_HOST"
+    ],
+    "sampleEnvironment": {
+      "GRAFANA_HOST": "grafana.example.com"
+    },
+    "limitations": [
+      "Requires a customer-owned public HTTPS Grafana instance exposing the documented legacy HTTP API. No localhost/private-IP endpoints.",
+      "Dashboard GET binds the Grafana12 legacy API; Grafana13 deprecates /api routes while keeping them accessible. New /apis dashboard resources are outside this toolset."
+    ],
+    "repoId": "grafana-mcp",
+    "product": "pipmcp",
+    "artifactType": "connector",
+    "sourceRevision": "bc8bd70c6c4ccf37c5128475972e61edc5bf6a0004d234769d523c2fa67e3156",
+    "managedAvailability": {
+      "status": "import-required",
+      "integration": "openapi-to-mcp",
+      "checkedAt": "2026-11-08T13:20:45.156456+00:00"
+    }
+  },
+  "capabilityEvidence": {
+    "local": {
+      "level": "Tested",
+      "operations": [
+        {
+          "name": "search_dashboards",
+          "level": "Tested",
+          "evidenceRefs": [
+            "Provider request/stdio contract tests"
+          ],
+          "method": "contract-fixture"
+        },
+        {
+          "name": "get_dashboard",
+          "level": "Tested",
+          "evidenceRefs": [
+            "Provider request/stdio contract tests"
+          ],
+          "method": "contract-fixture"
+        },
+        {
+          "name": "create_annotation",
+          "level": "Tested",
+          "evidenceRefs": [
+            "Provider request/stdio contract tests"
+          ],
+          "method": "contract-fixture"
+        }
+      ],
+      "evidenceRefs": [
+        "Provider request/stdio contract tests"
+      ],
+      "mode": "local"
+    },
+    "managed": {
+      "level": "Documented",
+      "operations": [
+        {
+          "name": "search_dashboards",
+          "level": "Documented",
+          "evidenceRefs": [],
+          "method": "documentation"
+        },
+        {
+          "name": "get_dashboard",
+          "level": "Documented",
+          "evidenceRefs": [],
+          "method": "documentation"
+        },
+        {
+          "name": "create_annotation",
+          "level": "Documented",
+          "evidenceRefs": [],
+          "method": "documentation"
+        }
+      ],
+      "evidenceRefs": [],
+      "mode": "managed"
+    }
+  },
+  "utility": {
+    "problem": "Inspect a dashboard and record an approved release annotation. Read provider data first, then explicitly approve the selected change with operator write opt-in and a unique per-call approval key.",
+    "output": "Actual provider API results through local MCP tools"
+  },
+  "providerDocs": "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/folder_dashboard_search/",
+  "factory": "leadadapter-pipmcp",
+  "generatorVersion": 2
+}
